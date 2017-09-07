@@ -5,7 +5,10 @@ import Private from './components/Private/Private';
 import './App.css';
 
 class App extends Component {
+
+
   render() {
+
     return (
       <div>
         <Route exact path='/' component={Login}/>
