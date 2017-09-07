@@ -62,14 +62,28 @@ passport.deserializeUser(function(user, done){
 //SET UP OUR ENDPOINTS (NEED 4 ENDPOINT PER OUR DESIGN)
 //ENDPOINT #1
 app.get('/auth', passport.authenticate('auth0'));
+
 //ENDPOINT #2
 app.get('/auth/callback', passport.authenticate('auth0', {
   successRedirect: 'http://localhost:3000/#/private',
   failureRedirect: 'http://localhost:3000/#/'
-}))
+}));
+
 //ENDPOINT #3
+app.get('/auth/me', (req, res) => {
+  if(!req.user) {
+    return res.status(404).send('User not found')
+  } else {
+    return res.status(200).send(req.user);
+  }
+});
 
-
+//ENDPOINT #4 (Logout)
+app.get('/auth/logout', (req, res) => {
+  req.logout() //PASSPORT GIVES US THIS TO TERMINATE A LOGIN SESSION
+  return res.redirect(302, 'http://localhost:3000/#/'); //res.redirect comes from express to redirect user to the given url
+    //302 is the status code for redirect
+})
 
 let PORT = 3005;
 app.listen(PORT, () => {
